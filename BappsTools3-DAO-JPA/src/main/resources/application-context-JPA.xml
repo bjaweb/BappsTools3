@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+						http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	
+	<!--à definir dans le projet appelant   -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+		<property name="location">			
+			<value>classpath:/application.properties</value><!-- par default -->
+		</property>
+	</bean>
+			
+	<context:annotation-config/>
+		
+	<mvc:annotation-driven />
+	
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+
+		<property name="dataSource" ref="dataSource" />
+
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+		</property>
+		
+		<!-- <property name="packagesToScan" value="org.sid.eboutique.*" /> --> <!-- utile pour la partie transactionnal -->
+        <property name="packagesToScan">
+            <list>
+                <value>${packagesToScan1:.}</value>
+                <value>${packagesToScan2:.}</value>
+                <value>${packagesToScan3:.}</value>
+            </list>
+        </property>
+        
+        
+		<!-- This makes /META-INF/persistence.xml is no longer necessary -->
+		<!-- <property name="packagesToScan" value="com.howtodoinjava.demo.model" 
+			/> -->
+
+		<!-- JpaVendorAdapter implementation for Hibernate EntityManager. Exposes 
+			Hibernate's persistence provider and EntityManager extension interface -->
+		<property name="jpaVendorAdapter">
+			<!-- <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" 
+				/> -->
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+				<property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />				
+			</bean>
+		</property>
+		<!-- <property name="jpaProperties"> <props> <prop key="hibernate.hbm2ddl.auto">create</prop> 
+			<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop> 
+			</props> </property> -->
+			
+		 <!-- le fichier  jpaProperties.properties doit être present dans le projet appellant -->
+        <property name="jpaProperties" ref="jpaProperties1"/>
+			
+		<!-- <property name="persistenceUnitManager">
+        <bean
+            class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+            <property name="defaultDataSource" ref="dataSource" />
+        </bean>
+    	</property> -->
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	
+	<tx:annotation-driven transaction-manager="transactionManager" /> 
+	
+	
+	<bean id="jpaProperties1"
+      class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+  <property name="locations">
+    <list>
+      <!--  <value>classpath*:jpaProperties1.properties</value> --> <!-- ici les valeurs par defauts commune à toutes les applis -->
+       <value>classpath:/application.properties</value>  <!-- ici valeurs spécifiques pour l'appli -->
+    </list>
+  </property>
+</bean>
+
+	
+<!-- 	 
+	  <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+	  
+  persistence 
+  <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />  
+ -->
+
+ <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="${ResourceBundleMessageSource}" />
+        <property name="defaultEncoding" value="ISO-8859-1" />
+    </bean>  
+	 
+
+<bean class="com.bja.Hello">
+	<property name="message" value="ok ça marche"></property>
+</bean>
+
+
+</beans>
