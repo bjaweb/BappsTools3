@@ -10,9 +10,19 @@
  
 	<name>BappsTools3-CORE</name>
 	<packaging>jar</packaging> 
+	<contributors>
+	 <contributor>
+	  <name> bernard Janvion</name>
+	  <email>bjanvion@gmail.com</email>
+	  <organization>bjaweb</organization>	  
+	  <roles>
+	  	<role>product owner</role>
+	  </roles>	  
+	 </contributor>
+	</contributors>
  
 	<dependencies>
-
+		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
