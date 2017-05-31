@@ -20,6 +20,10 @@
 			<value>classpath:/application.properties</value><!-- par default -->
 		</property>
 	</bean>
+	
+	<!-- possibilité de faire à aussi
+			 <context:property-placeholder   location="classpath*:META-INF/spring/*.properties" /> 
+	  -->
 			
 	<context:annotation-config/>
 		
@@ -80,15 +84,15 @@
 	</bean>
 
 	
-	 <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" /> 
-	<!-- <tx:annotation-driven transaction-manager="transactionManager"  /> --> 
+	 <!-- <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" /> --> 
+	 <tx:annotation-driven transaction-manager="transactionManager"  /> 
 	
 	<bean id="jpaProperties1"
       class="org.springframework.beans.factory.config.PropertiesFactoryBean">
   <property name="locations">
     <list>
       <!--  <value>classpath*:jpaProperties1.properties</value> --> <!-- ici les valeurs par defauts commune à toutes les applis -->
-       <value>classpath:/application.properties</value>  <!-- ici valeurs spécifiques pour l'appli -->
+       <value>classpath:/application.properties</value>  <!-- ici valeurs spécifiques pour l'appli -->       
     </list>
   </property>
 </bean>
